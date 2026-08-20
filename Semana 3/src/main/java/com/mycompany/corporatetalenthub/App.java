@@ -8,6 +8,8 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -19,6 +21,32 @@ public class App {
     private static final double NOTA_MINIMA = 0.0;
     private static final double NOTA_MAXIMA = 100.0;
     private static final double PROMEDIO_PARA_PROMOCION = 80.0;
+
+    /*
+    * List.of() y Map.of() crean colecciones inmutables introducidas
+    * desde Java 9. Son apropiadas para datos de configuración porque
+    * no permiten agregar, eliminar ni modificar elementos después
+    * de su creación, reduciendo cambios accidentales durante la ejecución.
+    *
+    * A diferencia de un ArrayList tradicional, estas colecciones no
+    * permiten operaciones como add() o remove(). Si se necesita una
+    * colección modificable, debe utilizarse una implementación mutable
+    * como ArrayList.
+     */
+    private static final List<String> TECNOLOGIAS = List.of(
+            "Java",
+            "JavaScript",
+            "Python",
+            "SQL",
+            "HTML",
+            "CSS"
+    );
+    private static final Map<Integer, String> SEDES = Map.of(
+            1, "Barranquilla",
+            2, "Bogotá",
+            3, "Medellín",
+            4, "Cali"
+    );
 
     public static void main(String[] args) {
         try (var scanner = new Scanner(System.in)) {
@@ -68,11 +96,14 @@ public class App {
                             break;
 
                         case 5:
+                            mostrarTecnologiasYSedes(TECNOLOGIAS, SEDES);
+                            break;
+                        case 6:
                             mostrarReporte(empleados);
-                            
+
                             break;
 
-                        case 6:
+                        case 7:
                             mostrarCategoriasSalariales();
                             break;
 
@@ -117,10 +148,29 @@ public class App {
                  2. Listar empleados
                  3. Buscar empleado por ID
                  4. Eliminar empleado
-                 5. Mostrar reporte de desempeño
-                 6. Consultar categorías salariales
+                 5. Consultar tecnologías y sedes          
+                 6. Mostrar reporte de desempeño
+                 7. Consultar categorías salariales
                  0. Salir
                 """);
+    }
+
+    private static void mostrarTecnologiasYSedes(
+            List<String> tecnologias,
+            Map<Integer, String> sedes) {
+
+        System.out.println("TECNOLOGÍAS");
+
+        for (var tecnologia : tecnologias) {
+            System.out.println("- " + tecnologia);
+        }
+
+        System.out.println("SEDES");
+
+        for (var sede : sedes.entrySet()) {
+            System.out.println(
+                    sede.getKey() + ". " + sede.getValue());
+        }
     }
 
     private static boolean registrarEmpleado(
@@ -172,9 +222,9 @@ public class App {
             scanner.nextLine();
             return false;
         }
-        
+
         var calificaciones = new double[CANTIDAD_TRIMESTRES];
-        
+
         for (var trimestre = 0;
                 trimestre < CANTIDAD_TRIMESTRES;
                 trimestre++) {

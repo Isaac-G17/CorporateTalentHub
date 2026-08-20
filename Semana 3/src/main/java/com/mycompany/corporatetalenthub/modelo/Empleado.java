@@ -18,7 +18,7 @@ public class Empleado {
     private final double[] calificaciones;
     private double promedioDesempeno;
 
-    public Empleado(int id, String nombre, byte edad, double salario,double[] calificaciones) {
+    public Empleado(int id, String nombre, byte edad, double salario, double[] calificaciones) {
         this.id = id;
         this.nombre = nombre;
         this.edad = edad;
