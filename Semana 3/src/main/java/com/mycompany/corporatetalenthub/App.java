@@ -107,6 +107,10 @@ public class App {
                             mostrarCategoriasSalariales();
                             break;
 
+                        case 8:
+                            mostrarOrdenEmpleados(empleados);
+                            break;
+
                         case 0:
                             sistemaActivo = false;
                             System.out.println("Sesión finalizada.");
@@ -151,6 +155,7 @@ public class App {
                  5. Consultar tecnologías y sedes          
                  6. Mostrar reporte de desempeño
                  7. Consultar categorías salariales
+                 8. Mostrar Orden de Empleados
                  0. Salir
                 """);
     }
@@ -424,5 +429,27 @@ public class App {
                 - Desde $4.000.000 y menos de $7.000.000: SENIOR
                 - Desde $7.000.000: LÍDER
                 """);
+    }
+
+    private static void mostrarOrdenEmpleados(
+            List<Empleado> empleados) {
+
+        if (empleados.isEmpty()) {
+            System.out.println("No hay empleados registrados.");
+            return;
+        }
+
+        var primero = empleados.getFirst();
+
+        var ultimo = empleados.getLast();
+
+        System.out.println("Primer empleado " + primero.getNombre());
+        System.out.println("Ultimo empleado " + ultimo.getNombre() + "\n");
+
+        System.out.println("Lista de empleados en orden inverso".toUpperCase());
+        
+        for (var empleado : empleados.reversed()) {
+            System.out.println("Empleado: " + empleado.getNombre());
+        }
     }
 }
