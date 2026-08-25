@@ -53,6 +53,8 @@ public class App {
             var empleados = new ArrayList<Empleado>();
             var empleadosPorId = new HashMap<String, Empleado>();
             var sistemaActivo = true;
+            
+            cargarEmpleadosDePrueba(empleados, empleadosPorId);
 
             do {
                 mostrarMenu();
@@ -106,9 +108,17 @@ public class App {
                         case 7:
                             mostrarCategoriasSalariales();
                             break;
-
+ 
                         case 8:
                             mostrarOrdenEmpleados(empleados);
+                            break;
+                            
+                        case 9:
+                            filtrarPorPuntajeMinimo(scanner, empleados, empleadosPorId);
+                            break;
+                            
+                        case 10:
+                            MostrarReporteFinal(empleados);
                             break;
 
                         case 0:
@@ -156,10 +166,38 @@ public class App {
                  6. Mostrar reporte de desempeño
                  7. Consultar categorías salariales
                  8. Mostrar Orden de Empleados
+                 9. Filtrar por puntaje mínimo
+                10. Generar reporte final         
                  0. Salir
                 """);
     }
-
+    
+    private static void cargarEmpleadosDePrueba(
+            ArrayList<Empleado> empleados,
+            HashMap<String, Empleado> empleadosPorId) {
+ 
+        var empleadosDePrueba = List.of(
+                new Empleado(1, "Ana García", (byte) 28, 1_800_000.0,
+                        new double[]{85.0, 90.0, 78.0}),
+                new Empleado(2, "Carlos Pérez", (byte) 34, 3_200_000.0,
+                        new double[]{92.0, 88.0, 95.0}),
+                new Empleado(3, "Laura Rodríguez", (byte) 41, 5_500_000.0,
+                        new double[]{70.0, 65.0, 72.0}),
+                new Empleado(4, "Miguel Torres", (byte) 25, 1_500_000.0,
+                        new double[]{60.0, 55.0, 58.0}),
+                new Empleado(5, "Sofía Ramírez", (byte) 37, 8_000_000.0,
+                        new double[]{97.0, 99.0, 96.0})
+        );
+ 
+        for (var empleado : empleadosDePrueba) {
+            empleados.add(empleado);
+            empleadosPorId.put(String.valueOf(empleado.getId()), empleado);
+        }
+ 
+        System.out.println(
+                empleados.size() + " empleados de prueba cargados.");
+    }
+    
     private static void mostrarTecnologiasYSedes(
             List<String> tecnologias,
             Map<Integer, String> sedes) {
@@ -339,6 +377,55 @@ public class App {
                 + " eliminado correctamente.");
     }
 
+    private static void filtrarPorPuntajeMinimo(
+            Scanner scanner,
+            ArrayList<Empleado> empleados,
+            HashMap<String, Empleado> empleadosPorId) {
+
+        if (empleados.isEmpty()) {
+            System.out.println("Todavía no hay empleados registrados.");
+            return;
+        }
+
+        System.out.print("Ingrese el puntaje mínimo de desempeño ( 0 a 100): ");
+
+        var puntajeMinimo = scanner.nextDouble();
+        scanner.nextLine();
+
+        if (puntajeMinimo < NOTA_MINIMA || puntajeMinimo > NOTA_MAXIMA) {
+            System.out.println("El puntaje mínimo está fuera del rango permitido");
+            return;
+        }
+
+        var empleadosAntes = empleados.size();
+
+        empleados.removeIf(empleado -> {
+            var calificaciones = empleado.getCalificaciones();
+        
+            var suma = 0.0;
+
+            for (var calificacion : calificaciones) {
+                suma += calificacion;
+            }
+
+            var promedio = suma / calificaciones.length;
+            empleado.setPromedioDesempeno(promedio);
+
+            var noCumplePuntaje = promedio < puntajeMinimo;
+
+            if (noCumplePuntaje) {
+                empleadosPorId.remove(String.valueOf(empleado.getId()));
+            }
+
+            return noCumplePuntaje;
+        });
+        
+        var empleadosDespues = empleados.size();
+        var eliminados = empleadosAntes - empleadosDespues;
+        
+        System.out.println( eliminados + "Empleado(s) eliminado(s) por no alcanzar el puntaje mínimo");
+    }
+
     private static void mostrarReporte(
             ArrayList<Empleado> empleados) {
 
@@ -387,6 +474,30 @@ public class App {
         }
     }
 
+    private static void MostrarReporteFinal(
+            ArrayList<Empleado> empleados) {
+
+        System.out.println("\nReporte final".toUpperCase());
+
+        if (empleados.isEmpty()) {
+            System.out.println("Todavía no hay empleados registrados.");
+            return;
+        }
+
+        var totalEmpleados = empleados.size();
+        var sumaSalarios = 0.0;
+
+        for (var empleado : empleados) {
+            sumaSalarios += empleado.getSalario();
+        }
+
+        var promedioSalarios = sumaSalarios / totalEmpleados;
+
+        System.out.printf("Total de empleados: %d%n"
+                + "Promedio de salarios: %.2f%n", totalEmpleados, promedioSalarios);
+
+    }
+ 
     public static String obtenerCategoriaSalarial(double salario) {
         var rango = determinarRangoSalarial(salario);
 
@@ -431,6 +542,14 @@ public class App {
                 """);
     }
 
+
+    /*
+    * En Java Legacy los extremos se consultaban mediante índices:
+    * get(0) y get(size() - 1).
+    *
+    * Java 21 incorpora getFirst() y getLast(), que expresan directamente
+    * la intención. reversed() permite recorrer la secuencia en sentido inverso.
+    */
     private static void mostrarOrdenEmpleados(
             List<Empleado> empleados) {
 
@@ -447,7 +566,7 @@ public class App {
         System.out.println("Ultimo empleado " + ultimo.getNombre() + "\n");
 
         System.out.println("Lista de empleados en orden inverso".toUpperCase());
-        
+
         for (var empleado : empleados.reversed()) {
             System.out.println("Empleado: " + empleado.getNombre());
         }
