@@ -1,0 +1,10 @@
+com\mycompany\corporatetalenthub\App.class
+com\mycompany\corporatetalenthub\modelo\Gerente.class
+com\mycompany\corporatetalenthub\documentacion\NotasArquitectura.class
+com\mycompany\corporatetalenthub\modelo\ConsultorExterno.class
+com\mycompany\corporatetalenthub\modelo\Empleado.class
+com\mycompany\corporatetalenthub\modelo\Promocionable.class
+com\mycompany\corporatetalenthub\modelo\Persona.class
+com\mycompany\corporatetalenthub\modelo\DesempeñoReport.class
+com\mycompany\corporatetalenthub\modelo\Desarrollador.class
+com\mycompany\corporatetalenthub\modelo\EmpresaRecord.class
