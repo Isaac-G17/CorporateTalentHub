@@ -126,7 +126,7 @@ public class App {
                             break;
                             
                         case 11:
-                            mostrarDatallePorRol(empleados);
+                            mostrarDetallePorRol(empleados);
                             break;
                         
                         case 12:
@@ -598,8 +598,20 @@ public class App {
             System.out.println("Empleado: " + empleado.getNombre());
         }
     }
-
-    private static void mostrarDatallePorRol(
+    /*
+    * Java 8/11 requería comprobar el tipo del objeto mediante instanceof
+    * y posteriormente realizar un casting manual para acceder a los
+    * atributos y métodos específicos de cada subclase.
+    *
+    * Java 21 permite utilizar Pattern Matching for switch, donde el tipo
+    * del objeto se comprueba directamente en cada case y se obtiene una
+    * variable ya tipada, como "des" para Desarrollador o "ger" para Gerente.
+    *
+    * Esta evolución reduce el código repetitivo, evita el casting manual
+    * y mejora la legibilidad y seguridad del código al trabajar con
+    * diferentes tipos dentro de una misma jerarquía.
+    */
+    private static void mostrarDetallePorRol(
             ArrayList<Empleado> empleados){
             
         if (empleados.isEmpty()) {
@@ -607,7 +619,7 @@ public class App {
             return;
         }
 
-        System.out.println("\nDatalles por rol".toUpperCase());
+        System.out.println("\nDetalles por rol".toUpperCase());
 
         for( var empleado: empleados){
 
@@ -622,8 +634,10 @@ public class App {
                         ger.getId(),
                         ger.getNombre(),
                         ger.getPresupuestoMensual());
-                default -> {
-                }
+                default -> System.out.printf(
+                    "ID: %d | NOMBRE: %s | ROL: Empleado%n",
+                    empleado.getId(),
+                    empleado.getNombre());
             }
 
         }
