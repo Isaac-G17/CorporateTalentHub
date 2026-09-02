@@ -28,4 +28,9 @@ hs_err_pid*
 replay_pid*
 
 # End of https://www.toptal.com/developers/gitignore/api/java
+/Semana 1/target/
+/Semana 2/target/
 /Semana 3/target/
+/Semana 4/target/
+Semana 5/src/main/resources/db.properties
+Semana 5/target/
