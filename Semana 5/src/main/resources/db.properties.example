@@ -1,0 +1,6 @@
+# Reemplaza estos valores por los de tu servidor PostgreSQL local
+# antes de ejecutar la aplicacicion. Ver schema.sql para crear la tabla.
+
+db.url=jdbc:postgresql://localhost:5432/corporate_talent_hub
+db.user=postgres
+db.password=CAMBIA_ESTO
