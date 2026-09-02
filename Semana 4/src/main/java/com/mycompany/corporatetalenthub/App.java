@@ -7,6 +7,7 @@ import com.mycompany.corporatetalenthub.modelo.DesempeñoReport;
 import com.mycompany.corporatetalenthub.modelo.Empleado;
 import com.mycompany.corporatetalenthub.modelo.Desarrollador;
 import com.mycompany.corporatetalenthub.modelo.Gerente;
+import com.mycompany.corporatetalenthub.modelo.Persona;
 import com.mycompany.corporatetalenthub.modelo.Promocionable;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -611,15 +612,53 @@ public class App {
     * y mejora la legibilidad y seguridad del código al trabajar con
     * diferentes tipos dentro de una misma jerarquía.
     */
+    /*
+    * Sintaxis Legacy (Java 8/11): validación de rol mediante instanceof
+    * seguido de un casting manual obligatorio. Cada rama repite la
+    * comprobación de tipo y, antes de poder invocar un método propio de
+    * la subclase, hay que convertir explícitamente la referencia, por
+    * ejemplo ((Desarrollador) persona).getLenguajePrincipal(). Si se
+    * olvida el cast, el código no compila; si el cast es incorrecto,
+    * falla en tiempo de ejecución con ClassCastException.
+    */
+    private static void validarRolLegacy(Persona persona) {
+        if (persona instanceof Desarrollador) {
+            var lenguaje = ((Desarrollador) persona).getLenguajePrincipal();
+            System.out.printf(
+                    "ID: %d | NOMBRE: %s | ROL: Desarrollador | LENGUAJE: %s%n",
+                    persona.getId(),
+                    persona.getNombre(),
+                    lenguaje);
+        } else if (persona instanceof Gerente) {
+            var presupuesto = ((Gerente) persona).getPresupuestoMensual();
+            System.out.printf(
+                    "ID: %d | NOMBRE: %s | ROL: Gerente | PRESUPUESTO: %.2f%n",
+                    persona.getId(),
+                    persona.getNombre(),
+                    presupuesto);
+        } else {
+            System.out.printf(
+                    "ID: %d | NOMBRE: %s | ROL: Empleado%n",
+                    persona.getId(),
+                    persona.getNombre());
+        }
+    }
+
     private static void mostrarDetallePorRol(
             ArrayList<Empleado> empleados){
-            
+
         if (empleados.isEmpty()) {
             System.out.println("No hay empleados registrados.");
             return;
         }
 
-        System.out.println("\nDetalles por rol".toUpperCase());
+        System.out.println("\nEstilo Legacy (instanceof + casting manual)".toUpperCase());
+
+        for (var empleado : empleados) {
+            validarRolLegacy(empleado);
+        }
+
+        System.out.println("\nEstilo Moderno (Pattern Matching)".toUpperCase());
 
         for( var empleado: empleados){
 
